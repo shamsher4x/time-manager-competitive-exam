@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 Krishan ji Study Tracker - Pastel Pink</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+        }
+
+        body {
+            background: #ffe4ec; /* Soft pastel pink background */
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .app {
+            max-width: 1400px;
+            width: 100%;
+            background: #fff9fb; /* Very light pink */
+            border-radius: 40px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(255, 182, 193, 0.3); /* Pink shadow */
+            border: 1px solid #ffc0cb; /* Pastel pink border */
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #b34167; /* Dusty rose */
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        h1 i {
+            background: #ffb6c1; /* Light pink */
+            padding: 15px;
+            border-radius: 50%;
+            color: #871f4a; /* Dark pink */
+        }
+
+        .auth-section {
+            background: #ffe4ed; /* Soft pink */
+            border-radius: 60px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            border: 1px solid #ffb6c1;
+        }
+        .auth-section input {
+            flex: 1 1 200px;
+            background: white;
+            border: 2px solid #ffb6c1;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            outline: none;
+        }
+        .auth-section button {
+            background: #ff9eb5; /* Soft pink */
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #b34167; /* Darker pink shadow */
+            transition: 0.1s;
+        }
+        .auth-section button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #b34167;
+        }
+        #userInfo {
+            color: #871f4a;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr;
+            gap: 30px;
+        }
+        @media (max-width: 900px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: #fff0f5; /* Lavender blush */
+            border-radius: 40px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #ffc0d5;
+            box-shadow: 0 8px 20px rgba(255, 150, 180, 0.2); /* Pink shadow */
+        }
+        .card-title {
+            font-size: 1.5rem;
+            color: #b34167;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px dashed #ffb6c1;
+            padding-bottom: 10px;
+        }
+
+        .manual-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .manual-form input {
+            flex: 1 1 150px;
+            background: white;
+            border: 2px solid #ffb6c1;
+            border-radius: 50px;
+            padding: 12px 18px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        .manual-form button {
+            background: #ff9eb5;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #b34167;
+            transition: 0.1s;
+        }
+        .manual-form button:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #b34167;
+        }
+
+        .timer-card {
+            background: linear-gradient(135deg, #ffb6c1, #ff9eb5); /* Pink gradient */
+            color: white;
+            border-radius: 50px;
+            padding: 25px;
+            text-align: center;
+        }
+        .timer-display {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 15px 0;
+            font-family: monospace;
+            text-shadow: 2px 2px 0 #b34167;
+        }
+        .progress-bar {
+            height: 20px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 30px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #b34167;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .timer-actions button {
+            background: white;
+            color: #b34167;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 0 #871f4a;
+        }
+        .timer-actions button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slot-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .slot-item {
+            background: white;
+            border-radius: 60px;
+            padding: 15px 20px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 8px solid #ff80a5; /* Pink accent */
+            box-shadow: 0 4px 10px rgba(255, 128, 165, 0.2);
+        }
+        .slot-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .slot-time {
+            background: #ffccdd; /* Light pink */
+            padding: 5px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #871f4a;
+        }
+        .slot-actions button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            margin: 0 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: white;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+        }
+        .play-btn { background: #48bb78; } /* Keeping green for play */
+        .tick-btn { background: #fbbf24; } /* Keeping yellow for tick */
+        .tick-btn.completed { background: #48bb78; }
+        .delete-btn { background: #f56565; } /* Keeping red for delete */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-box {
+            background: white;
+            border-radius: 40px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(255, 128, 165, 0.1);
+            border: 1px solid #ffb6c1;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #b34167;
+        }
+        .stat-label {
+            color: #871f4a;
+            font-size: 0.9rem;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .filter-row select {
+            flex: 1 1 200px;
+            background: white;
+            border: 2px solid #ffb6c1;
+            border-radius: 50px;
+            padding: 12px 18px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin: 15px 0;
+        }
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 600;
+            color: #b34167;
+            padding: 5px;
+        }
+        .calendar-day {
+            background: white;
+            border-radius: 30px;
+            padding: 10px 5px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.2s;
+        }
+        .calendar-day.has-slot { background: #ffccdd; font-weight: 600; }
+        .calendar-day.today { border-color: #48bb78; background: #f0fff4; } /* Keeping green for today */
+        .calendar-day.selected { border-color: #b34167; background: #ffe4f0; }
+        .calendar-day .fire { color: #f56565; margin-left: 2px; }
+
+        .graph-container { height: 300px; margin: 25px 0; }
+        .graph-filters {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .graph-filters button {
+            background: #ffe4ed;
+            border: 2px solid #ff9eb5;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #871f4a;
+        }
+        .graph-filters button.active {
+            background: #ff9eb5;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #b34167;
+            border-top: 2px dashed #ffb6c1;
+            padding-top: 20px;
+        }
+        .footer a { color: #ff80a5; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="app">
+    <h1><i class="fas fa-book-open"></i> Krishan ji · Pastel Study</h1>
+    
+    <div class="auth-section">
+        <input type="text" id="regUsername" placeholder="Username">
+        <input type="password" id="regPassword" placeholder="Password">
+        <button onclick="register()"><i class="fas fa-user-plus"></i> Register</button>
+        <button onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <button onclick="logout()" id="logoutBtn" style="display:none;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        <span id="userInfo"></span>
+    </div>
+    
+    <div class="main-grid">
+        <div class="left-col">
+            <div class="card">
+                <div class="card-title"><i class="fas fa-plus-circle"></i> Add Session</div>
+                <div class="manual-form">
+                    <input type="text" id="subject" placeholder="Subject (e.g., Maths)">
+                    <input type="date" id="sessionDate">
+                    <input type="time" id="startTime">
+                    <input type="time" id="endTime">
+                    <button onclick="addManual()">Add</button>
+                </div>
+            </div>
+            
+            <div class="card" id="timerCard" style="display: none;">
+                <div class="card-title"><i class="fas fa-hourglass-half"></i> Current Session</div>
+                <div class="timer-card">
+                    <div style="font-size: 1.5rem;" id="activeSubject">Maths</div>
+                    <div class="timer-display" id="timerCountdown">00:00:00</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div id="progressPercent">0% complete</div>
+                    <div class="timer-actions">
+                        <button id="pauseBtn" onclick="pauseTimer()"><i class="fas fa-pause"></i> Pause</button>
+                        <button id="resumeBtn" onclick="resumeTimer()" disabled><i class="fas fa-play"></i> Resume</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="card-title"><i class="fas fa-list"></i> All Sessions</div>
+                    <button onclick="resetAll()" style="background: #f56565; color: white; border: none; padding: 8px 15px; border-radius: 40px; cursor: pointer;">Reset</button>
+                </div>
+                <div class="slot-list" id="slotList"></div>
+            </div>
+        </div>
+        
+        <div class="right-col">
+            <div class="card">
+                <div class="card-title"><i class="fas fa-chart-line"></i> Analytics</div>
+                
+                <div class="filter-row">
+                    <select id="subjectFilter" onchange="updateStats()">
+                        <option value="all">All Subjects</option>
+                    </select>
+                    <select id="timeFilter" onchange="updateStats()">
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="lastMonth">Last Month</option>
+                        <option value="last6Months">Last 6 Months</option>
+                        <option value="year">Last Year</option>
+                    </select>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-box"><span class="stat-number" id="filteredHours">0h</span><div class="stat-label">Filtered Total</div></div>
+                    <div class="stat-box"><span class="stat-number" id="totalHours">0h</span><div class="stat-label">All Time</div></div>
+                    <div class="stat-box"><span class="stat-number" id="streakCount">0</span><div class="stat-label">Streak</div></div>
+                </div>
+                
+                <div class="card-title" style="font-size: 1.2rem;"><i class="fas fa-calendar"></i> Calendar</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <button onclick="prevMonth()" style="background: #ffe4ed; border: 2px solid #ff9eb5; border-radius: 40px; padding: 6px 16px; cursor: pointer;"><i class="fas fa-chevron-left"></i></button>
+                    <span id="calendarMonthYear"></span>
+                    <button onclick="nextMonth()" style="background: #ffe4ed; border: 2px solid #ff9eb5; border-radius: 40px; padding: 6px 16px; cursor: pointer;"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+                
+                <div class="graph-filters">
+                    <button class="active" onclick="setGraphType('bar', this)">Daily Hours</button>
+                    <button onclick="setGraphType('pie', this)">Subject %</button>
+                    <button onclick="setGraphType('line', this)">Weekly Trend</button>
+                </div>
+                
+                <div class="graph-container">
+                    <canvas id="studyChart"></canvas>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button onclick="exportData()" style="background: #48bb78; color: white; border: none; padding: 10px 20px; border-radius: 40px; cursor: pointer;"><i class="fas fa-download"></i> Backup</button>
+                    <button onclick="importData()" style="background: #ff9eb5; color: white; border: none; padding: 10px 20px; border-radius: 40px; cursor: pointer;"><i class="fas fa-upload"></i> Restore</button>
+                    <button onclick="goToToday()" style="background: #fbbf24; color: white; border: none; padding: 10px 20px; border-radius: 40px; cursor: pointer;"><i class="fas fa-calendar-check"></i> Today</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <i class="fas fa-info-circle"></i> Krishan ji Study Tracker · Pastel Pink Edition | <a href="#">About</a> | <a href="#">Privacy</a>
+    </div>
+</div>
+
+<script>
+    Chart.register(ChartDataLabels);
+    
+    // ---------- DATA ----------
+    let slots = [];
+    let currentUser = localStorage.getItem('currentUser') || null;
+    let users = JSON.parse(localStorage.getItem('users')) || {};
+    
+    let studyChart = null;
+    let currentGraphType = 'bar';
+    let currentCalendarDate = new Date();
+    let selectedDate = new Date().toISOString().split('T')[0];
+    
+    // Timer variables
+    let timerInterval = null;
+    let timerPaused = false;
+    let timerRemainingSeconds = 0;
+    let timerTotalSeconds = 0;
+    let currentActiveSlot = null;
+    
+    // ---------- REAL DATE SYNC ----------
+    function getCurrentDate() {
+        return new Date();
+    }
+    
+    function getCurrentDateString() {
+        return getCurrentDate().toISOString().split('T')[0];
+    }
+    
+    function syncWithRealDate() {
+        const currentDateStr = getCurrentDateString();
+        document.getElementById('sessionDate').value = currentDateStr;
+        renderCalendar();
+        renderSlots();
+        updateStats();
+    }
+    
+    let lastKnownDate = getCurrentDateString();
+    setInterval(() => {
+        const currentDate = getCurrentDateString();
+        if (currentDate !== lastKnownDate) {
+            lastKnownDate = currentDate;
+            syncWithRealDate();
+        }
+    }, 1000);
+    
+    // ---------- AUTH ----------
+    window.register = function() {
+        let username = document.getElementById('regUsername').value.trim();
+        let password = document.getElementById('regPassword').value.trim();
+        if (!username || !password) return alert('Username and password required');
+        if (users[username]) return alert('User already exists');
+        users[username] = { password: password, data: [] };
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Registered successfully! Please login.');
+    };
+    
+    window.login = function() {
+        let username = document.getElementById('regUsername').value.trim();
+        let password = document.getElementById('regPassword').value.trim();
+        if (!username || !password) return alert('Enter credentials');
+        if (!users[username] || users[username].password !== password) return alert('Invalid credentials');
+        currentUser = username;
+        localStorage.setItem('currentUser', currentUser);
+        updateAuthUI();
+        loadUserData();
+    };
+    
+    window.logout = function() {
+        currentUser = null;
+        localStorage.removeItem('currentUser');
+        updateAuthUI();
+        loadDemoData();
+    };
+    
+    function updateAuthUI() {
+        if (currentUser) {
+            document.getElementById('userInfo').innerText = `👤 ${currentUser}`;
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+        } else {
+            document.getElementById('userInfo').innerText = '';
+            document.getElementById('logoutBtn').style.display = 'none';
+        }
+    }
+    
+    // ---------- DATA LOAD/SAVE ----------
+    function saveData() {
+        if (currentUser) {
+            users[currentUser].data = slots;
+            localStorage.setItem('users', JSON.stringify(users));
+        } else {
+            localStorage.setItem('demoData', JSON.stringify(slots));
+        }
+    }
+    
+    function loadUserData() {
+        if (currentUser && users[currentUser]) {
+            slots = users[currentUser].data || [];
+        } else {
+            slots = [];
+        }
+        renderAll();
+    }
+    
+    function loadDemoData() {
+        let saved = localStorage.getItem('demoData');
+        if (saved) {
+            slots = JSON.parse(saved);
+        } else {
+            let today = getCurrentDateString();
+            slots = [
+                { id: Date.now()-3000, subject: 'Maths', start: '09:00', end: '10:30', completed: true, date: today },
+                { id: Date.now()-2000, subject: 'Physics', start: '11:00', end: '12:15', completed: false, date: today },
+                { id: Date.now()-1000, subject: 'Chemistry', start: '14:00', end: '15:30', completed: false, date: today }
+            ];
+        }
+        renderAll();
+    }
+    
+    // ---------- HELPERS ----------
+    function timeToSeconds(time) {
+        let [h, m] = time.split(':').map(Number);
+        return h * 3600 + m * 60;
+    }
+    
+    function secondsToTime(seconds) {
+        seconds = Math.max(0, Math.floor(seconds));
+        let h = Math.floor(seconds / 3600) % 24;
+        let m = Math.floor((seconds % 3600) / 60);
+        let s = seconds % 60;
+        return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+    
+    function formatHours(totalMinutes) {
+        let hours = Math.floor(totalMinutes / 60);
+        let minutes = totalMinutes % 60;
+        return `${hours}h ${minutes}m`;
+    }
+    
+    // ---------- RENDER SLOTS ----------
+    function renderSlots() {
+        let container = document.getElementById('slotList');
+        if (slots.length === 0) {
+            container.innerHTML = '<div style="text-align: center; padding: 30px; color: #b34167;">🌸 No sessions yet. Add one above!</div>';
+            return;
+        }
+        let sorted = [...slots].sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
+        container.innerHTML = '';
+        let today = getCurrentDateString();
+        sorted.forEach(slot => {
+            let div = document.createElement('div');
+            div.className = 'slot-item';
+            let dateDisplay = slot.date === today ? 'Today' : slot.date;
+            div.innerHTML = `
+                <div class="slot-info">
+                    <span class="slot-time">${dateDisplay} ${slot.start} - ${slot.end}</span>
+                    <span style="font-weight: 600;">${slot.subject}</span>
+                    ${slot.completed ? '<i class="fas fa-check-circle" style="color: #48bb78;"></i>' : ''}
+                </div>
+                <div class="slot-actions">
+                    ${!slot.completed ? `<button class="play-btn" onclick="startSlot('${slot.id}')"><i class="fas fa-play"></i></button>` : ''}
+                    <button class="tick-btn ${slot.completed ? 'completed' : ''}" onclick="toggleComplete('${slot.id}')" ${slot.completed ? 'disabled' : ''}><i class="fas fa-check"></i></button>
+                    <button class="delete-btn" onclick="deleteSlot('${slot.id}')"><i class="fas fa-times"></i></button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+    
+    // ---------- STATS ----------
+    function getDateRange(filter) {
+        let now = getCurrentDate();
+        let start = new Date(now);
+        let end = new Date(now);
+        
+        switch(filter) {
+            case 'today':
+                start.setHours(0,0,0,0);
+                end.setHours(23,59,59,999);
+                break;
+            case 'week':
+                start.setDate(now.getDate() - now.getDay());
+                start.setHours(0,0,0,0);
+                end = new Date(now);
+                break;
+            case 'month':
+                start = new Date(now.getFullYear(), now.getMonth(), 1);
+                end = new Date(now);
+                break;
+            case 'lastMonth':
+                start = new Date(now.getFullYear(), now.getMonth()-1, 1);
+                end = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+                break;
+            case 'last6Months':
+                start = new Date(now.getFullYear(), now.getMonth()-5, 1);
+                end = new Date(now);
+                break;
+            case 'year':
+                start = new Date(now.getFullYear(), 0, 1);
+                end = new Date(now);
+                break;
+            default:
+                start = new Date(0);
+                end = new Date(now);
+        }
+        return { start: start.toISOString().split('T')[0], end: end.toISOString().split('T')[0] };
+    }
+    
+    function updateStats() {
+        let subjectFilter = document.getElementById('subjectFilter').value;
+        let timeFilter = document.getElementById('timeFilter').value;
+        let range = getDateRange(timeFilter);
+        
+        let totalMins = 0;
+        let filteredMins = 0;
+        let completedDates = [];
+        
+        slots.forEach(slot => {
+            if (!slot.completed) return;
+            let mins = (timeToSeconds(slot.end) - timeToSeconds(slot.start)) / 60;
+            
+            totalMins += mins;
+            
+            if ((subjectFilter === 'all' || slot.subject === subjectFilter) && slot.date >= range.start && slot.date <= range.end) {
+                filteredMins += mins;
+            }
+            
+            completedDates.push(slot.date);
+        });
+        
+        document.getElementById('filteredHours').innerText = formatHours(filteredMins);
+        document.getElementById('totalHours').innerText = formatHours(totalMins);
+        
+        let today = getCurrentDateString();
+        let uniqueDates = [...new Set(completedDates)].sort().reverse();
+        let streak = 0;
+        let checkDate = new Date(today);
+        while (true) {
+            let dateStr = checkDate.toISOString().split('T')[0];
+            if (uniqueDates.includes(dateStr)) {
+                streak++;
+                checkDate.setDate(checkDate.getDate() - 1);
+            } else {
+                break;
+            }
+        }
+        document.getElementById('streakCount').innerText = streak;
+    }
+    
+    // ---------- CALENDAR with streak fire ----------
+    function renderCalendar() {
+        let year = currentCalendarDate.getFullYear();
+        let month = currentCalendarDate.getMonth();
+        let firstDay = new Date(year, month, 1).getDay();
+        let daysInMonth = new Date(year, month + 1, 0).getDate();
+        let monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        document.getElementById('calendarMonthYear').innerText = monthNames[month] + ' ' + year;
+        
+        let completedDates = new Set(slots.filter(s => s.completed).map(s => s.date));
+        let today = getCurrentDateString();
+        
+        // Calculate streak dates (consecutive days ending today)
+        let streakDates = new Set();
+        if (completedDates.has(today)) {
+            let cur = new Date(today);
+            while (completedDates.has(cur.toISOString().split('T')[0])) {
+                streakDates.add(cur.toISOString().split('T')[0]);
+                cur.setDate(cur.getDate() - 1);
+            }
+        }
+        
+        let gridHtml = '';
+        let dayHeaders = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+        dayHeaders.forEach(d => gridHtml += `<div class="calendar-day-header">${d}</div>`);
+        
+        for (let i = 0; i < firstDay; i++) gridHtml += '<div class="calendar-day"></div>';
+        
+        for (let d = 1; d <= daysInMonth; d++) {
+            let dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            let hasSlot = completedDates.has(dateStr);
+            let isSelected = dateStr === selectedDate;
+            let isToday = dateStr === today;
+            let isStreak = streakDates.has(dateStr);
+            
+            let classes = 'calendar-day';
+            if (hasSlot) classes += ' has-slot';
+            if (isSelected) classes += ' selected';
+            if (isToday) classes += ' today';
+            
+            gridHtml += `<div class="${classes}" onclick="selectDate('${dateStr}')">${d}${isStreak ? '<span class="fire">🔥</span>' : ''}</div>`;
+        }
+        document.getElementById('calendarGrid').innerHTML = gridHtml;
+    }
+    
+    window.selectDate = function(dateStr) {
+        selectedDate = dateStr;
+        renderCalendar();
+    };
+    
+    window.prevMonth = function() {
+        currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+        renderCalendar();
+    };
+    
+    window.nextMonth = function() {
+        currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+        renderCalendar();
+    };
+    
+    window.goToToday = function() {
+        let today = getCurrentDateString();
+        selectedDate = today;
+        currentCalendarDate = new Date();
+        renderCalendar();
+        document.getElementById('sessionDate').value = today;
+    };
+    
+    // ---------- GRAPHS ----------
+    function renderGraph() {
+        let ctx = document.getElementById('studyChart').getContext('2d');
+        if (studyChart) studyChart.destroy();
+        
+        if (currentGraphType === 'bar') {
+            let labels = [], data = [];
+            for (let i = 6; i >= 0; i--) {
+                let date = new Date();
+                date.setDate(date.getDate() - i);
+                let dateStr = date.toISOString().split('T')[0];
+                labels.push(date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }));
+                let totalMins = 0;
+                slots.filter(s => s.completed && s.date === dateStr).forEach(s => {
+                    totalMins += (timeToSeconds(s.end) - timeToSeconds(s.start)) / 60;
+                });
+                data.push(totalMins / 60);
+            }
+            studyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Hours Studied',
+                        data: data,
+                        backgroundColor: '#ff9eb5',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Hours' } } }
+                }
+            });
+        } else if (currentGraphType === 'pie') {
+            let subjectMap = new Map();
+            slots.filter(s => s.completed).forEach(s => {
+                let mins = (timeToSeconds(s.end) - timeToSeconds(s.start)) / 60;
+                subjectMap.set(s.subject, (subjectMap.get(s.subject) || 0) + mins);
+            });
+            studyChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: [...subjectMap.keys()],
+                    datasets: [{
+                        data: [...subjectMap.values()].map(m => (m/60).toFixed(1)),
+                        backgroundColor: ['#ff9eb5', '#ffb3c6', '#ffccdd', '#ffd9e6', '#fbb1c2']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        datalabels: {
+                            formatter: (value) => value + 'h',
+                            color: 'white',
+                            font: { weight: 'bold' }
+                        }
+                    }
+                }
+            });
+        } else {
+            let weeks = [], data = [];
+            for (let w = 3; w >= 0; w--) {
+                let weekStart = new Date();
+                weekStart.setDate(weekStart.getDate() - (w * 7));
+                weeks.push(`Week ${4-w}`);
+                let totalMins = 0;
+                for (let d = 0; d < 7; d++) {
+                    let date = new Date(weekStart);
+                    date.setDate(date.getDate() + d);
+                    let dateStr = date.toISOString().split('T')[0];
+                    slots.filter(s => s.completed && s.date === dateStr).forEach(s => {
+                        totalMins += (timeToSeconds(s.end) - timeToSeconds(s.start)) / 60;
+                    });
+                }
+                data.push(totalMins / 60);
+            }
+            studyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: weeks,
+                    datasets: [{
+                        label: 'Hours per Week',
+                        data: data,
+                        borderColor: '#ff80a5',
+                        backgroundColor: 'rgba(255, 158, 181, 0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+    }
+    
+    window.setGraphType = function(type, btn) {
+        currentGraphType = type;
+        document.querySelectorAll('.graph-filters button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderGraph();
+    };
+    
+    // ---------- TIMER ----------
+    function updateTimerDisplay() {
+        if (!currentActiveSlot) return;
+        
+        let percent = ((timerTotalSeconds - timerRemainingSeconds) / timerTotalSeconds) * 100;
+        document.getElementById('progressFill').style.width = percent + '%';
+        document.getElementById('progressPercent').innerText = percent.toFixed(1) + '% complete';
+        document.getElementById('timerCountdown').innerText = secondsToTime(timerRemainingSeconds);
+    }
+    
+    function timerTick() {
+        if (timerPaused || !currentActiveSlot) return;
+        
+        if (timerRemainingSeconds <= 0) {
+            let active = slots.find(s => s.id === currentActiveSlot);
+            if (active) {
+                active.completed = true;
+                saveData();
+            }
+            stopTimer();
+            renderAll();
+            return;
+        }
+        
+        timerRemainingSeconds--;
+        updateTimerDisplay();
+    }
+    
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+        document.getElementById('timerCard').style.display = 'none';
+        currentActiveSlot = null;
+        timerPaused = false;
+        timerRemainingSeconds = 0;
+        timerTotalSeconds = 0;
+    }
+    
+    window.startSlot = function(id) {
+        stopTimer();
+        
+        let slot = slots.find(s => s.id == id);
+        if (!slot || slot.completed) return;
+        
+        let originalStart = timeToSeconds(slot.start);
+        let originalEnd = timeToSeconds(slot.end);
+        let durationSeconds = originalEnd - originalStart;
+        
+        timerTotalSeconds = durationSeconds;
+        timerRemainingSeconds = durationSeconds;
+        currentActiveSlot = slot.id;
+        timerPaused = false;
+        
+        document.getElementById('pauseBtn').disabled = false;
+        document.getElementById('resumeBtn').disabled = true;
+        document.getElementById('timerCard').style.display = 'block';
+        document.getElementById('activeSubject').innerText = slot.subject;
+        
+        updateTimerDisplay();
+        
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(timerTick, 1000);
+    };
+    
+    window.pauseTimer = function() {
+        if (!currentActiveSlot || timerPaused) return;
+        
+        timerPaused = true;
+        document.getElementById('pauseBtn').disabled = true;
+        document.getElementById('resumeBtn').disabled = false;
+    };
+    
+    window.resumeTimer = function() {
+        if (!currentActiveSlot || !timerPaused) return;
+        
+        timerPaused = false;
+        document.getElementById('pauseBtn').disabled = false;
+        document.getElementById('resumeBtn').disabled = true;
+    };
+    
+    // ---------- CRUD ----------
+    window.addManual = function() {
+        let subject = document.getElementById('subject').value.trim();
+        let date = document.getElementById('sessionDate').value;
+        let start = document.getElementById('startTime').value;
+        let end = document.getElementById('endTime').value;
+        if (!subject || !date || !start || !end) return alert('Fill all fields');
+        if (start >= end) return alert('End must be after start');
+        slots.push({
+            id: Date.now() + Math.random(),
+            subject: subject,
+            date: date,
+            start: start,
+            end: end,
+            completed: false
+        });
+        saveData();
+        renderAll();
+        document.getElementById('subject').value = '';
+        document.getElementById('sessionDate').value = getCurrentDateString();
+        document.getElementById('startTime').value = '';
+        document.getElementById('endTime').value = '';
+    };
+    
+    window.toggleComplete = function(id) {
+        let slot = slots.find(s => s.id == id);
+        if (slot) {
+            slot.completed = !slot.completed;
+            saveData();
+            renderAll();
+            if (currentActiveSlot == id && slot.completed) stopTimer();
+        }
+    };
+    
+    window.deleteSlot = function(id) {
+        slots = slots.filter(s => s.id != id);
+        saveData();
+        renderAll();
+        if (currentActiveSlot == id) stopTimer();
+    };
+    
+    window.resetAll = function() {
+        if (confirm('Delete all sessions?')) {
+            slots = [];
+            saveData();
+            renderAll();
+            stopTimer();
+        }
+    };
+    
+    // ---------- SUBJECT FILTER UPDATE ----------
+    function updateSubjectFilter() {
+        let subjects = [...new Set(slots.map(s => s.subject))].sort();
+        let select = document.getElementById('subjectFilter');
+        let currentVal = select.value;
+        select.innerHTML = '<option value="all">All Subjects</option>';
+        subjects.forEach(sub => {
+            select.innerHTML += `<option value="${sub}">${sub}</option>`;
+        });
+        select.value = currentVal && subjects.includes(currentVal) ? currentVal : 'all';
+    }
+    
+    // ---------- EXPORT/IMPORT ----------
+    window.exportData = function() {
+        let dataStr = JSON.stringify(slots, null, 2);
+        let blob = new Blob([dataStr], { type: 'application/json' });
+        let url = URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = `krishanji-${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+    };
+    
+    window.importData = function() {
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = function(e) {
+            let file = e.target.files[0];
+            let reader = new FileReader();
+            reader.onload = function(ev) {
+                try {
+                    let imported = JSON.parse(ev.target.result);
+                    if (Array.isArray(imported)) {
+                        slots = imported;
+                        saveData();
+                        renderAll();
+                    } else alert('Invalid file');
+                } catch { alert('Invalid JSON'); }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    };
+    
+    // ---------- RENDER ALL ----------
+    function renderAll() {
+        updateSubjectFilter();
+        renderSlots();
+        updateStats();
+        renderCalendar();
+        renderGraph();
+    }
+    
+    // ---------- INIT ----------
+    window.onload = function() {
+        document.getElementById('sessionDate').value = getCurrentDateString();
+        lastKnownDate = getCurrentDateString();
+        
+        if (currentUser) loadUserData();
+        else loadDemoData();
+        updateAuthUI();
+        renderAll();
+    };
+</script>
+</body>
+</html>
